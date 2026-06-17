@@ -1,0 +1,63 @@
+{
+  "id": "9e7bdd1a-d453-4aa9-b40a-ddb1f961c259",
+  "name": "Jobava London",
+  "color": "white",
+  "eco": "",
+  "createdAt": "2026-06-17T12:16:03.707Z",
+  "updatedAt": "2026-06-17T12:20:53.597Z",
+  "tree": {
+    "san": "",
+    "uci": "",
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "comment": "",
+    "arrows": [],
+    "moves": [
+      {
+        "san": "d4",
+        "uci": "d2d4",
+        "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1",
+        "comment": "",
+        "arrows": [],
+        "moves": [
+          {
+            "san": "d5",
+            "uci": "d7d5",
+            "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+            "comment": "",
+            "arrows": [],
+            "moves": [
+              {
+                "san": "Nc3",
+                "uci": "b1c3",
+                "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+                "comment": "",
+                "arrows": [],
+                "moves": []
+              },
+              {
+                "san": "Nc3",
+                "uci": "b1c3",
+                "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+                "comment": "",
+                "arrows": [],
+                "moves": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}        "uci": "b1c3",
+                "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+                "comment": "",
+                "arrows": [],
+                "moves": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "id": "442a0bf2-8669-4249-8cda-e13eee3da3a4",
+  "name": "Jobava London",
+  "color": "white",
+  "eco": "",
+  "createdAt": "2026-06-17T12:51:51.983Z",
+  "updatedAt": "2026-06-17T14:52:53.098Z",
+  "tree": {
+    "san": "",
+    "uci": "",
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "comment": "",
+    "arrows": [],
+    "moves": [
+      {
+        "san": "d4",
+        "uci": "d2d4",
+        "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1",
+        "comment": "",
+        "arrows": [],
+        "moves": [
+          {
+            "san": "d5",
+            "uci": "d7d5",
+            "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+            "comment": "",
+            "arrows": [],
+            "moves": [
+              {
+                "san": "Nc3",
+                "uci": "b1c3",
+                "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+                "comment": "",
+                "arrows": [],
+                "moves": [
+                  {
+                    "san": "Nf6",
+                    "uci": "g8f6",
+                    "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 2 3",
+                    "comment": "",
+                    "arrows": [],
+                    "moves": [
+                      {
+                        "san": "Bf4",
+                        "uci": "c1f4",
+                        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3",
+                        "comment": "",
+                        "arrows": [],
+                        "moves": [],
+                        "tags": [
+                          "Main Line"
+                        ]
+                      }
+                    ],
+                    "tags": [
+                      "Main Line"
+                    ]
+                  }
+                ],
+                "tags": [
+                  "Main Line"
+                ]
+              }
+            ],
+            "tags": [
+              "Main Line"
+            ]
+          }
+        ]
+      }
+    ],
+    "analysis": {
+      "depth": 18,
+      "score": 46,
+      "bestMove": "e2e4",
+      "pv": [
+        "e7e6",
+        "d2d4",
+        "d7d5",
+        "b1c3",
+        "g8f6",
+        "e4e5",
+        "f6d7",
+        "f2f4",
+        "c7c5",
+        "g1f3",
+        "b8c6",
+        "c1e3",
+        "a7a6",
+        "d1d2",
+        "b7b5",
+        "c3e2",
+        "d7b6",
+        "e2g3",
+        "b6c4",
+        "f1c4",
+        "d5c4",
+        "c2c3"
+      ],
+      "timestamp": "2026-06-17T14:20:30.487Z"
+    }
+  },
+  "faceFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3"
+}
