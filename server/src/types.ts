@@ -16,6 +16,7 @@ export interface MoveNode {
   san: string;
   uci: string;
   fen: string;
+  name?: string;
   comment: string;
   arrows: Arrow[];
   tags: string[];
@@ -31,7 +32,7 @@ export interface Repertoire {
   createdAt: string;
   updatedAt: string;
   faceFen?: string;
-  tree: MoveNode;
+  trees: MoveNode[];
 }
 
 export interface RepertoireSummary {

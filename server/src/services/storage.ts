@@ -6,6 +6,11 @@ import { Repertoire, RepertoireSummary, MoveNode } from '../types.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.resolve(__dirname, '../../data');
 
+type LegacyRepertoire = Omit<Repertoire, 'trees'> & {
+  trees?: MoveNode[];
+  tree?: MoveNode;
+};
+
 async function ensureDataDir() {
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
@@ -18,6 +23,19 @@ function filePath(id: string): string {
   return path.join(DATA_DIR, `${id}.json`);
 }
 
+function migrate(rep: LegacyRepertoire): Repertoire {
+  if (Array.isArray(rep.trees) && rep.trees.length > 0) {
+    return rep as Repertoire;
+  }
+  if (rep.tree) {
+    rep.trees = [rep.tree];
+    delete (rep as { tree?: MoveNode }).tree;
+    return rep as Repertoire;
+  }
+  rep.trees = [];
+  return rep as Repertoire;
+}
+
 export async function listRepertoires(): Promise<RepertoireSummary[]> {
   await ensureDataDir();
   const files = await fs.readdir(DATA_DIR);
@@ -26,7 +44,7 @@ export async function listRepertoires(): Promise<RepertoireSummary[]> {
     if (!file.endsWith('.json')) continue;
     try {
       const data = await fs.readFile(path.join(DATA_DIR, file), 'utf-8');
-      const rep: Repertoire = JSON.parse(data);
+      const rep = migrate(JSON.parse(data) as LegacyRepertoire);
       repertoires.push({
         id: rep.id,
         name: rep.name,
@@ -34,7 +52,7 @@ export async function listRepertoires(): Promise<RepertoireSummary[]> {
         eco: rep.eco,
         createdAt: rep.createdAt,
         updatedAt: rep.updatedAt,
-        moveCount: countMoves(rep.tree),
+        moveCount: rep.trees.reduce((sum, tree) => sum + countMoves(tree), 0),
         faceFen: rep.faceFen,
       });
     } catch {
@@ -48,7 +66,7 @@ export async function getRepertoire(id: string): Promise<Repertoire | null> {
   await ensureDataDir();
   try {
     const data = await fs.readFile(filePath(id), 'utf-8');
-    return JSON.parse(data);
+    return migrate(JSON.parse(data) as LegacyRepertoire);
   } catch {
     return null;
   }

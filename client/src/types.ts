@@ -37,6 +37,7 @@ export interface MoveNode {
   tags: string[];
   analysis?: AnalysisCache;
   moves: MoveNode[];
+  name?: string;
 }
 
 export interface Repertoire {
@@ -47,7 +48,7 @@ export interface Repertoire {
   createdAt: string;
   updatedAt: string;
   faceFen?: string;
-  tree: MoveNode;
+  trees: MoveNode[];
 }
 
 export interface RepertoireSummary {

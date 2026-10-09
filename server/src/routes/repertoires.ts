@@ -30,6 +30,15 @@ repertoiresRouter.post('/', async (req: Request, res: Response) => {
     return;
   }
   const now = new Date().toISOString();
+  const initialRoot: MoveNode = {
+    san: '',
+    uci: '',
+    fen: STARTING_FEN,
+    comment: '',
+    arrows: [],
+    tags: [],
+    moves: [],
+  };
   const rep: Repertoire = {
     id: uuidv4(),
     name,
@@ -37,15 +46,7 @@ repertoiresRouter.post('/', async (req: Request, res: Response) => {
     eco: eco || '',
     createdAt: now,
     updatedAt: now,
-    tree: {
-      san: '',
-      uci: '',
-      fen: STARTING_FEN,
-      comment: '',
-      arrows: [],
-      tags: [],
-      moves: [],
-    },
+    trees: [initialRoot],
   };
   await storage.createRepertoire(rep);
   res.status(201).json(rep);
@@ -76,18 +77,18 @@ repertoiresRouter.delete('/:id', async (req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-repertoiresRouter.patch('/:id/tree', async (req: Request, res: Response) => {
+repertoiresRouter.patch('/:id/trees', async (req: Request, res: Response) => {
   const existing = await storage.getRepertoire(req.params.id);
   if (!existing) {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  const { tree } = req.body;
-  if (!tree) {
-    res.status(400).json({ error: 'tree is required' });
+  const { trees } = req.body;
+  if (!Array.isArray(trees)) {
+    res.status(400).json({ error: 'trees must be an array' });
     return;
   }
-  existing.tree = tree as MoveNode;
+  existing.trees = trees as MoveNode[];
   existing.updatedAt = new Date().toISOString();
   await storage.updateRepertoire(existing);
   res.json(existing);
@@ -99,12 +100,17 @@ repertoiresRouter.post('/:id/move', async (req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  const { parentFen, san } = req.body;
+  const { parentFen, san, treeIndex } = req.body;
   if (!san || !parentFen) {
     res.status(400).json({ error: 'san and parentFen are required' });
     return;
   }
-  const node = findNode(existing.tree, parentFen);
+  const idx = typeof treeIndex === 'number' ? treeIndex : 0;
+  if (idx < 0 || idx >= existing.trees.length) {
+    res.status(404).json({ error: 'Tree not found' });
+    return;
+  }
+  const node = findNode(existing.trees[idx], parentFen);
   if (!node) {
     res.status(404).json({ error: 'Parent position not found in tree' });
     return;
@@ -141,12 +147,17 @@ repertoiresRouter.delete('/:id/move', async (req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  const { parentFen, fen } = req.body;
+  const { parentFen, fen, treeIndex } = req.body;
   if (!fen || !parentFen) {
     res.status(400).json({ error: 'fen and parentFen are required' });
     return;
   }
-  const parent = findNode(existing.tree, parentFen);
+  const idx = typeof treeIndex === 'number' ? treeIndex : 0;
+  if (idx < 0 || idx >= existing.trees.length) {
+    res.status(404).json({ error: 'Tree not found' });
+    return;
+  }
+  const parent = findNode(existing.trees[idx], parentFen);
   if (!parent) {
     res.status(404).json({ error: 'Parent position not found' });
     return;
@@ -163,12 +174,17 @@ repertoiresRouter.patch('/:id/move', async (req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  const { fen, comment, arrows, analysis, tags } = req.body;
+  const { fen, treeIndex, comment, arrows, analysis, tags } = req.body;
   if (!fen) {
     res.status(400).json({ error: 'fen is required' });
     return;
   }
-  const node = findNode(existing.tree, fen);
+  const idx = typeof treeIndex === 'number' ? treeIndex : 0;
+  if (idx < 0 || idx >= existing.trees.length) {
+    res.status(404).json({ error: 'Tree not found' });
+    return;
+  }
+  const node = findNode(existing.trees[idx], fen);
   if (!node) {
     res.status(404).json({ error: 'Position not found' });
     return;
@@ -206,7 +222,7 @@ repertoiresRouter.post('/:id/pgn', async (req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  existing.tree = result.tree;
+  existing.trees = [result.tree];
   existing.color = result.color;
   existing.updatedAt = new Date().toISOString();
   await storage.updateRepertoire(existing);
@@ -226,7 +242,7 @@ repertoiresRouter.post('/:id/duplicate', async (req: Request, res: Response) => 
     name: `${existing.name} (copy)`,
     createdAt: now,
     updatedAt: now,
-    tree: JSON.parse(JSON.stringify(existing.tree)),
+    trees: JSON.parse(JSON.stringify(existing.trees)),
   };
   await storage.createRepertoire(dup);
   res.status(201).json(dup);
@@ -238,7 +254,13 @@ repertoiresRouter.get('/:id/pgn', async (req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
-  const pgn = treeToPgn(existing.tree, existing.color);
+  const idx = Number(req.query.index ?? 0);
+  const tree = existing.trees[idx];
+  if (!tree) {
+    res.status(404).json({ error: 'Tree index out of range' });
+    return;
+  }
+  const pgn = treeToPgn(tree, existing.color);
   res.setHeader('Content-Type', 'text/plain');
   res.send(pgn);
 });

@@ -2,25 +2,32 @@ import { useEffect, useRef, useState } from 'react';
 import type { Square } from 'react-chessboard';
 import { Chess } from 'chess.js';
 import ChessBoardWrapper from './ChessBoardWrapper';
-import { Repertoire } from '../types';
+import { MoveNode } from '../types';
 import { useToast } from '../hooks/useToast';
 
 type Feedback = { kind: 'correct' | 'incorrect' | 'info'; message: string } | null;
 
-export default function PracticePanel({ repertoire, onExit }: { repertoire: Repertoire; onExit: () => void }) {
+interface Props {
+  root: MoveNode;
+  color: 'white' | 'black';
+  name: string;
+  onExit: () => void;
+}
+
+export default function PracticePanel({ root, color, name, onExit }: Props) {
   const toast = useToast();
-  const [currentFen, setCurrentFen] = useState<string>(repertoire.tree.fen);
-  const [currentNode, setCurrentNode] = useState(repertoire.tree);
+  const [currentFen, setCurrentFen] = useState<string>(root.fen);
+  const [currentNode, setCurrentNode] = useState(root);
   const [plies, setPlies] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [hint, setHint] = useState<string | null>(null);
   const lineCompleteNotifiedRef = useRef(false);
 
-  const isEmpty = repertoire.tree.moves.length === 0;
+  const isEmpty = root.moves.length === 0;
   const isLineComplete = !isEmpty && currentNode.moves.length === 0;
   const userTurn =
-    (new Chess(currentFen).turn() === 'w') === (repertoire.color === 'white');
+    (new Chess(currentFen).turn() === 'w') === (color === 'white');
 
   useEffect(() => {
     if (userTurn) return;
@@ -34,7 +41,7 @@ export default function PracticePanel({ repertoire, onExit }: { repertoire: Repe
       setHint(null);
     }, 600);
     return () => clearTimeout(timer);
-  }, [currentNode, currentFen, repertoire.color, userTurn]);
+  }, [currentNode, currentFen, color, userTurn]);
 
   useEffect(() => {
     if (isLineComplete && !lineCompleteNotifiedRef.current) {
@@ -72,8 +79,8 @@ export default function PracticePanel({ repertoire, onExit }: { repertoire: Repe
   };
 
   const restart = () => {
-    setCurrentFen(repertoire.tree.fen);
-    setCurrentNode(repertoire.tree);
+    setCurrentFen(root.fen);
+    setCurrentNode(root);
     setPlies(0);
     setMistakes(0);
     setFeedback(null);
@@ -104,7 +111,7 @@ export default function PracticePanel({ repertoire, onExit }: { repertoire: Repe
   const prompt = isLineComplete
     ? 'Line complete'
     : userTurn
-      ? `Your move (${repertoire.color === 'white' ? 'White' : 'Black'})`
+      ? `Your move (${color === 'white' ? 'White' : 'Black'})`
       : 'Waiting for opponent…';
 
   const feedbackClass = feedback
@@ -118,7 +125,7 @@ export default function PracticePanel({ repertoire, onExit }: { repertoire: Repe
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-gray-100 flex flex-col gap-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-lg font-semibold">Practice: {repertoire.name}</h2>
+        <h2 className="text-lg font-semibold">Practice: {name}</h2>
         <div className="flex gap-2">
           <button
             onClick={restart}
@@ -149,7 +156,7 @@ export default function PracticePanel({ repertoire, onExit }: { repertoire: Repe
         >
           <ChessBoardWrapper
             position={currentFen}
-            boardOrientation={repertoire.color}
+            boardOrientation={color}
             onPieceDrop={onPieceDrop}
           />
         </div>

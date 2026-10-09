@@ -1,0 +1,48 @@
+{
+  "id": "749b6497-1726-4f1c-8ff2-7753f14b906e",
+  "name": "Pawn Games",
+  "color": "white",
+  "eco": "",
+  "createdAt": "2026-10-09T15:35:03.179Z",
+  "updatedAt": "2026-10-09T15:47:11.865Z",
+  "trees": [
+    {
+      "san": "",
+      "uci": "",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "comment": "",
+      "arrows": [],
+      "tags": [],
+      "moves": [],
+      "analysis": {
+        "depth": 16,
+        "score": 50,
+        "bestMove": "e2e4",
+        "pv": [
+          "c7c6",
+          "d2d4",
+          "d7d5",
+          "b1c3",
+          "d5e4",
+          "c3e4",
+          "g8f6",
+          "e4g3",
+          "c8g4",
+          "d1d3",
+          "e7e6"
+        ],
+        "timestamp": "2026-10-09T15:47:00.920Z"
+      }
+    },
+    {
+      "san": "",
+      "uci": "",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "comment": "",
+      "arrows": [],
+      "tags": [],
+      "moves": [],
+      "name": "Position 2"
+    }
+  ]
+}

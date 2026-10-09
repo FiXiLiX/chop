@@ -34,11 +34,11 @@ export async function deleteRepertoire(id: string): Promise<void> {
   await fetch(`${BASE}/${id}`, { method: 'DELETE' });
 }
 
-export async function addMove(id: string, parentFen: string, san: string): Promise<void> {
+export async function addMove(id: string, parentFen: string, san: string, treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ parentFen, san }),
+    body: JSON.stringify({ parentFen, san, treeIndex }),
   });
   if (!res.ok) {
     const err = await res.json();
@@ -46,20 +46,20 @@ export async function addMove(id: string, parentFen: string, san: string): Promi
   }
 }
 
-export async function deleteMove(id: string, parentFen: string, fen: string): Promise<void> {
+export async function deleteMove(id: string, parentFen: string, fen: string, treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ parentFen, fen }),
+    body: JSON.stringify({ parentFen, fen, treeIndex }),
   });
   if (!res.ok) throw new Error('Failed to delete move');
 }
 
-export async function updateComment(id: string, fen: string, comment: string): Promise<void> {
+export async function updateComment(id: string, fen: string, comment: string, treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fen, comment }),
+    body: JSON.stringify({ fen, comment, treeIndex }),
   });
   if (!res.ok) throw new Error('Failed to update comment');
 }
@@ -72,20 +72,20 @@ export async function setFaceFen(id: string, faceFen: string): Promise<void> {
   });
 }
 
-export async function updateTags(id: string, fen: string, tags: string[]): Promise<void> {
+export async function updateTags(id: string, fen: string, tags: string[], treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fen, tags }),
+    body: JSON.stringify({ fen, tags, treeIndex }),
   });
   if (!res.ok) throw new Error('Failed to update tags');
 }
 
-export async function updateArrows(id: string, fen: string, arrows: { from: string; to: string; color?: string }[]): Promise<void> {
+export async function updateArrows(id: string, fen: string, arrows: { from: string; to: string; color?: string }[], treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fen, arrows }),
+    body: JSON.stringify({ fen, arrows, treeIndex }),
   });
   if (!res.ok) throw new Error('Failed to update arrows');
 }
@@ -105,11 +105,11 @@ export async function analyzePosition(fen: string, depth?: number, multiPv?: num
   return res.json();
 }
 
-export async function saveAnalysis(id: string, fen: string, analysis: { depth: number; score: number; bestMove: string; pv: string[]; timestamp: string }): Promise<void> {
+export async function saveAnalysis(id: string, fen: string, analysis: { depth: number; score: number; bestMove: string; pv: string[]; timestamp: string }, treeIndex: number): Promise<void> {
   const res = await fetch(`${BASE}/${id}/move`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fen, analysis }),
+    body: JSON.stringify({ fen, analysis, treeIndex }),
   });
   if (!res.ok) throw new Error('Failed to save analysis');
 }
@@ -124,20 +124,17 @@ export async function importPgn(id: string, pgn: string): Promise<Repertoire> {
   return res.json();
 }
 
-export async function exportPgn(id: string): Promise<string> {
-  const res = await fetch(`${BASE}/${id}/pgn`);
+export async function exportPgn(id: string, index = 0): Promise<string> {
+  const res = await fetch(`${BASE}/${id}/pgn?index=${index}`);
   return res.text();
 }
 
-export async function saveTree(id: string, tree: MoveNode): Promise<Repertoire> {
-  const res = await fetch(`${BASE}/${id}/tree`, {
+export async function saveTrees(id: string, trees: MoveNode[]): Promise<Repertoire> {
+  const res = await fetch(`${BASE}/${id}/trees`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tree }),
+    body: JSON.stringify({ trees }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || 'Failed to save tree');
-  }
+  if (!res.ok) throw new Error('Failed to save trees');
   return res.json();
 }

@@ -31,7 +31,7 @@ export function useTabs() {
     const tabId = `tab_${++tabCounter}`;
     setTabs((prev) => {
       setActiveTabId(tabId);
-      return [...prev, { tabId, repId: rep.id, title: rep.name, repertoire: { ...rep, tree: structuredClone(rep.tree) } }];
+      return [...prev, { tabId, repId: rep.id, title: rep.name, repertoire: { ...rep, trees: structuredClone(rep.trees) } }];
     });
   }, []);
 
