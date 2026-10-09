@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Chess } from 'chess.js';
 import { MoveNode } from '../types';
 
 interface Props {
@@ -11,9 +12,86 @@ interface Props {
   repertoireTags: string[];
   turn: 'w' | 'b';
   path: number[];
+  boardOrientation?: 'white' | 'black';
 }
 
-export default function MoveTree({ root, currentFen, onNavigate, onAddMove, onDeleteMove, onTagsSave, repertoireTags, turn, path }: Props) {
+const PIECE: Record<string, string> = {
+  K: '\u2654', Q: '\u2655', R: '\u2656', B: '\u2657', N: '\u2658', P: '\u2659',
+  k: '\u265a', q: '\u265b', r: '\u265c', b: '\u265d', n: '\u265e', p: '\u265f',
+};
+
+const BOARD_SIZE = 64;
+
+function MiniBoard({ fen, orientation }: { fen: string; orientation: 'white' | 'black' }) {
+  const rows = fen.split(' ')[0].split('/');
+  const squares: { piece: string; dark: boolean }[] = [];
+  for (let ri = 0; ri < 8; ri++) {
+    const row = orientation === 'white' ? rows[ri] : rows[7 - ri];
+    let col = 0;
+    for (const ch of row) {
+      if (ch >= '1' && ch <= '8') {
+        const empty = parseInt(ch);
+        for (let i = 0; i < empty; i++) {
+          const file = orientation === 'white' ? col : 7 - col;
+          squares.push({ piece: '', dark: (ri + file) % 2 === 1 });
+          col++;
+        }
+      } else {
+        const file = orientation === 'white' ? col : 7 - col;
+        squares.push({ piece: PIECE[ch] || ch, dark: (ri + file) % 2 === 1 });
+        col++;
+      }
+    }
+  }
+
+  return (
+    <div
+      className="grid grid-cols-8 rounded overflow-hidden flex-shrink-0"
+      style={{ width: BOARD_SIZE, height: BOARD_SIZE }}
+    >
+      {squares.map((sq, i) => (
+        <div
+          key={i}
+          className="flex items-center justify-center text-[10px] leading-none"
+          style={{ backgroundColor: sq.dark ? '#4a5568' : '#e2e8f0', color: sq.dark ? '#e2e8f0' : '#1a202c' }}
+        >
+          {sq.piece}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function getMoveLabel(fen: string, san: string): string {
+  const chess = new Chess(fen);
+  const moveNum = chess.moveNumber();
+  if (chess.turn() === 'b') {
+    return `${moveNum}. ${san}`;
+  } else {
+    return `${moveNum - 1}... ${san}`;
+  }
+}
+
+function getMainLineContinuation(node: MoveNode, max: number): string {
+  if (node.moves.length === 0) return '';
+  const chess = new Chess(node.fen);
+  const parts: string[] = [];
+  let cur: MoveNode = node;
+  for (let i = 0; i < max; i++) {
+    if (cur.moves.length === 0) break;
+    cur = cur.moves[0];
+    const moveNum = chess.moveNumber();
+    if (chess.turn() === 'w') {
+      parts.push(`${moveNum}.${cur.san}`);
+    } else {
+      parts.push(`${moveNum}...${cur.san}`);
+    }
+    chess.move(cur.san);
+  }
+  return parts.join(' ');
+}
+
+export default function MoveTree({ root, currentFen, onNavigate, onAddMove, onDeleteMove, onTagsSave, repertoireTags, boardOrientation = 'white' }: Props) {
   const [addingAt, setAddingAt] = useState<string | null>(null);
   const [moveInput, setMoveInput] = useState('');
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
@@ -47,49 +125,75 @@ export default function MoveTree({ root, currentFen, onNavigate, onAddMove, onDe
 
   function renderMove(node: MoveNode, idx: number, parentFen?: string): React.ReactNode {
     const isActive = node.fen === currentFen;
-    const prefix = turn === 'w' ? `${Math.floor((path.length + idx) / 2) + 1}.` : '';
     const key = `${parentFen || 'root'}-${node.san}-${idx}`;
     const isCollapsed = collapsed.has(node.fen);
     const hasChildren = node.moves.length > 0;
+    const label = getMoveLabel(node.fen, node.san);
+    const mainLine = getMainLineContinuation(node, 3);
+    const childCount = node.moves.length;
 
     return (
       <div key={key} className="ml-3 border-l border-gray-700 pl-2">
-        <div className={`flex items-center gap-1 py-0.5 ${isActive ? 'bg-indigo-900/40 rounded px-1 -ml-1' : ''}`}>
-          <div className="w-4 flex-shrink-0">
-            {hasChildren && (
+        <div
+          className={`flex items-start gap-2 p-1.5 rounded-lg border transition-colors ${
+            isActive ? 'bg-indigo-900/30 border-indigo-700' : 'bg-gray-800/50 border-gray-700 hover:border-gray-600'
+          }`}
+        >
+          <button onClick={() => onNavigate(node.fen)} className="flex-shrink-0 hover:opacity-80 transition-opacity">
+            <MiniBoard fen={node.fen} orientation={boardOrientation} />
+          </button>
+
+          <div className="flex-1 min-w-0 self-center">
+            <div className="flex items-center gap-1">
+              {hasChildren && (
+                <button
+                  onClick={() => toggleCollapse(node.fen)}
+                  className="text-xs text-gray-500 hover:text-gray-300 w-4 text-center flex-shrink-0"
+                  title={isCollapsed ? 'Expand' : 'Collapse'}
+                >
+                  {isCollapsed ? '\u25B6' : '\u25BC'}
+                </button>
+              )}
+              {!hasChildren && <div className="w-4 flex-shrink-0" />}
               <button
-                onClick={() => toggleCollapse(node.fen)}
-                className="text-xs text-gray-500 hover:text-gray-300 w-4 text-center"
-                title={isCollapsed ? 'Expand' : 'Collapse'}
+                onClick={() => onNavigate(node.fen)}
+                className={`text-sm font-mono hover:text-indigo-400 transition-colors flex-shrink-0 ${
+                  isActive ? 'text-indigo-300 font-bold' : 'text-gray-200'
+                }`}
               >
-                {isCollapsed ? '▶' : '▼'}
+                {label}
               </button>
+              {hasChildren && (
+                <span className="text-[11px] text-gray-500">
+                  {childCount} variation{childCount !== 1 ? 's' : ''}
+                </span>
+              )}
+              <button
+                onClick={() => onDeleteMove(node.fen, parentFen || root.fen)}
+                className="text-xs text-gray-500 hover:text-red-400 ml-auto flex-shrink-0"
+                title="Delete variation"
+              >
+                \u2715
+              </button>
+            </div>
+
+            {mainLine && (
+              <div className="text-[11px] text-gray-500 font-mono mt-0.5 truncate max-w-[260px]">
+                {mainLine}
+              </div>
             )}
+
+            <div className="flex items-center gap-1 mt-0.5">
+              <TagList tags={node.tags || []} nodeFen={node.fen} onTagsSave={onTagsSave} allTags={repertoireTags} />
+              {node.comment && (
+                <span className="text-[11px] text-gray-400 italic truncate hidden md:inline max-w-[80px]">\u2014 {node.comment}</span>
+              )}
+            </div>
           </div>
-          {prefix && <span className="text-xs text-gray-500 w-5 text-right flex-shrink-0">{prefix}</span>}
-          <button
-            onClick={() => onNavigate(node.fen)}
-            className={`text-sm font-mono hover:text-indigo-400 transition-colors flex-shrink-0 ${
-              isActive ? 'text-indigo-300 font-bold' : 'text-gray-200'
-            }`}
-          >
-            {node.san}
-          </button>
-          <TagList tags={node.tags || []} nodeFen={node.fen} onTagsSave={onTagsSave} allTags={repertoireTags} />
-          {node.comment && (
-            <span className="text-xs text-gray-400 italic truncate hidden md:inline max-w-[80px]">— {node.comment}</span>
-          )}
-          <button
-            onClick={() => onDeleteMove(node.fen, parentFen || root.fen)}
-            className="text-xs text-gray-500 hover:text-red-400 ml-auto flex-shrink-0"
-            title="Delete variation"
-          >
-            ✕
-          </button>
         </div>
 
         {hasChildren && !isCollapsed && (
-          <div>
+          <div className="mt-1">
             {node.moves.map((child, ci) => renderMove(child, ci, node.fen))}
           </div>
         )}
@@ -191,7 +295,7 @@ function TagList({ tags, nodeFen, onTagsSave, allTags }: { tags: string[]; nodeF
             onClick={() => onTagsSave(nodeFen, tags.filter((t) => t !== tag))}
             className="text-gray-500 hover:text-red-400 leading-none"
           >
-            ×
+            \u00D7
           </button>
         </span>
       ))}

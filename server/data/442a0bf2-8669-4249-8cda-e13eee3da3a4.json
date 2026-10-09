@@ -4,7 +4,7 @@
   "color": "white",
   "eco": "",
   "createdAt": "2026-06-17T12:51:51.983Z",
-  "updatedAt": "2026-06-17T14:52:53.098Z",
+  "updatedAt": "2026-10-09T14:20:54.339Z",
   "tree": {
     "san": "",
     "uci": "",
@@ -45,8 +45,319 @@
                         "uci": "c1f4",
                         "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3",
                         "comment": "",
-                        "arrows": [],
-                        "moves": [],
+                        "arrows": [
+                          {
+                            "from": "b8",
+                            "to": "c6",
+                            "color": "#ef4444"
+                          }
+                        ],
+                        "moves": [
+                          {
+                            "san": "Nc6",
+                            "uci": "b8c6",
+                            "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4",
+                            "comment": "",
+                            "arrows": [
+                              {
+                                "from": "c3",
+                                "to": "b5",
+                                "color": "#22c55e"
+                              },
+                              {
+                                "from": "e7",
+                                "to": "e5",
+                                "color": "#22c55e"
+                              }
+                            ],
+                            "tags": [
+                              "Mistake Nc6"
+                            ],
+                            "moves": [
+                              {
+                                "san": "Nb5",
+                                "uci": "c3b5",
+                                "fen": "r1bqkb1r/ppp1pppp/2n2n2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 5 4",
+                                "comment": "",
+                                "arrows": [],
+                                "tags": [
+                                  "Mistake Nc6"
+                                ],
+                                "moves": [
+                                  {
+                                    "san": "e5",
+                                    "uci": "e7e5",
+                                    "fen": "r1bqkb1r/ppp2ppp/2n2n2/1N1pp3/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 0 5",
+                                    "comment": "",
+                                    "arrows": [],
+                                    "tags": [
+                                      "Mistake Nc6"
+                                    ],
+                                    "moves": [
+                                      {
+                                        "san": "Bxe5",
+                                        "uci": "f4e5",
+                                        "fen": "r1bqkb1r/ppp2ppp/2n2n2/1N1pB3/3P4/8/PPP1PPPP/R2QKBNR b KQkq - 0 5",
+                                        "comment": "",
+                                        "arrows": [],
+                                        "tags": [],
+                                        "moves": [
+                                          {
+                                            "san": "Nxe5",
+                                            "uci": "c6e5",
+                                            "fen": "r1bqkb1r/ppp2ppp/5n2/1N1pn3/3P4/8/PPP1PPPP/R2QKBNR w KQkq - 0 6",
+                                            "comment": "",
+                                            "arrows": [],
+                                            "tags": [],
+                                            "moves": [
+                                              {
+                                                "san": "dxe5",
+                                                "uci": "d4e5",
+                                                "fen": "r1bqkb1r/ppp2ppp/5n2/1N1pP3/8/8/PPP1PPPP/R2QKBNR b KQkq - 0 6",
+                                                "comment": "",
+                                                "arrows": [],
+                                                "tags": [],
+                                                "moves": [],
+                                                "analysis": {
+                                                  "depth": 16,
+                                                  "score": -81,
+                                                  "bestMove": "a7a6",
+                                                  "pv": [
+                                                    "b5c3",
+                                                    "d5d4",
+                                                    "e5f6",
+                                                    "d4c3",
+                                                    "d1d8",
+                                                    "e8d8",
+                                                    "b2c3",
+                                                    "g7f6",
+                                                    "e2e3",
+                                                    "f8a3",
+                                                    "a1b1",
+                                                    "c8e6"
+                                                  ],
+                                                  "timestamp": "2026-10-09T14:20:51.557Z"
+                                                }
+                                              }
+                                            ],
+                                            "analysis": {
+                                              "depth": 16,
+                                              "score": -3,
+                                              "bestMove": "d4e5",
+                                              "pv": [
+                                                "f6g4",
+                                                "g1f3",
+                                                "c7c6",
+                                                "h2h3",
+                                                "g4e3",
+                                                "f2e3",
+                                                "c6b5",
+                                                "d1d2"
+                                              ],
+                                              "timestamp": "2026-10-09T14:20:47.827Z"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "analysis": {
+                                      "depth": 16,
+                                      "score": 75,
+                                      "bestMove": "f4e5",
+                                      "pv": [
+                                        "c6e5",
+                                        "d4e5",
+                                        "a7a6",
+                                        "b5c3",
+                                        "d5d4",
+                                        "e5f6",
+                                        "d4c3",
+                                        "d1d8",
+                                        "e8d8",
+                                        "b2c3",
+                                        "g7f6",
+                                        "e2e3",
+                                        "h8g8",
+                                        "h2h4",
+                                        "b7b5",
+                                        "g1e2",
+                                        "f8d6",
+                                        "g2g3",
+                                        "a8b8",
+                                        "e2d4"
+                                      ],
+                                      "timestamp": "2026-10-09T14:08:54.985Z"
+                                    }
+                                  },
+                                  {
+                                    "san": "Nh5",
+                                    "uci": "f6h5",
+                                    "fen": "r1bqkb1r/ppp1pppp/2n5/1N1p3n/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 6 5",
+                                    "comment": "",
+                                    "arrows": [],
+                                    "tags": [],
+                                    "moves": [
+                                      {
+                                        "san": "Nxc7+",
+                                        "uci": "b5c7",
+                                        "fen": "r1bqkb1r/ppN1pppp/2n5/3p3n/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 0 5",
+                                        "comment": "",
+                                        "arrows": [],
+                                        "tags": [],
+                                        "moves": [
+                                          {
+                                            "san": "Kd7",
+                                            "uci": "e8d7",
+                                            "fen": "r1bq1b1r/ppNkpppp/2n5/3p3n/3P1B2/8/PPP1PPPP/R2QKBNR w KQ - 1 6",
+                                            "comment": "",
+                                            "arrows": [],
+                                            "tags": [],
+                                            "moves": [
+                                              {
+                                                "san": "Be5",
+                                                "uci": "f4e5",
+                                                "fen": "r1bq1b1r/ppNkpppp/2n5/3pB2n/3P4/8/PPP1PPPP/R2QKBNR b KQ - 2 6",
+                                                "comment": "",
+                                                "arrows": [],
+                                                "tags": [],
+                                                "moves": [],
+                                                "analysis": {
+                                                  "depth": 16,
+                                                  "score": -163,
+                                                  "bestMove": "c6e5",
+                                                  "pv": [
+                                                    "c7a8",
+                                                    "e5c6",
+                                                    "e2e4",
+                                                    "h5f6",
+                                                    "e4d5",
+                                                    "f6d5",
+                                                    "g1f3",
+                                                    "e7e6",
+                                                    "a2a3",
+                                                    "f8d6",
+                                                    "c2c4",
+                                                    "d5f6",
+                                                    "f1e2",
+                                                    "d7e8",
+                                                    "d4d5",
+                                                    "c6e5"
+                                                  ],
+                                                  "timestamp": "2026-10-09T14:11:35.987Z"
+                                                }
+                                              }
+                                            ],
+                                            "analysis": {
+                                              "depth": 16,
+                                              "score": 134,
+                                              "bestMove": "f4e5",
+                                              "pv": [
+                                                "c6e5",
+                                                "c7a8",
+                                                "e5c6",
+                                                "e2e4",
+                                                "h5f6",
+                                                "e4d5",
+                                                "f6d5",
+                                                "f1e2",
+                                                "e7e6",
+                                                "c2c4",
+                                                "d8a5",
+                                                "e1f1",
+                                                "d5f6",
+                                                "g1f3",
+                                                "d7e8",
+                                                "a2a3",
+                                                "a5d8",
+                                                "b2b4",
+                                                "c8d7"
+                                              ],
+                                              "timestamp": "2026-10-09T14:11:27.828Z"
+                                            }
+                                          }
+                                        ],
+                                        "analysis": {
+                                          "depth": 16,
+                                          "score": -148,
+                                          "bestMove": "e8d7",
+                                          "pv": [
+                                            "f4e5",
+                                            "c6e5",
+                                            "c7a8",
+                                            "e5c6",
+                                            "e2e4",
+                                            "h5f6",
+                                            "e4d5",
+                                            "f6d5",
+                                            "g1f3",
+                                            "e7e6",
+                                            "f1e2",
+                                            "f8b4",
+                                            "c2c3",
+                                            "d5c3",
+                                            "b2c3",
+                                            "b4c3",
+                                            "f3d2",
+                                            "c3a1",
+                                            "d1a1",
+                                            "d7e7",
+                                            "e1g1",
+                                            "d8d4",
+                                            "a1c1",
+                                            "h8d8",
+                                            "f1d1",
+                                            "d4e5",
+                                            "e2f3",
+                                            "e5a5",
+                                            "f3c6",
+                                            "b7c6",
+                                            "d2c4",
+                                            "d8d1",
+                                            "c1d1",
+                                            "a5c5"
+                                          ],
+                                          "timestamp": "2026-10-09T14:11:21.518Z"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "analysis": {
+                                  "depth": 16,
+                                  "score": -70,
+                                  "bestMove": "e7e5",
+                                  "pv": [
+                                    "d4e5",
+                                    "a7a6",
+                                    "b5c3",
+                                    "f6h5",
+                                    "c3d5",
+                                    "c8e6",
+                                    "e2e4",
+                                    "h5f4",
+                                    "d5f4",
+                                    "d8e7",
+                                    "d1d2",
+                                    "a8d8",
+                                    "d2c3",
+                                    "g7g5",
+                                    "f4h5",
+                                    "e7b4",
+                                    "h5f6",
+                                    "e8e7",
+                                    "c3b4",
+                                    "c6b4",
+                                    "f1d3",
+                                    "b4d3",
+                                    "c2d3",
+                                    "d8d3"
+                                  ],
+                                  "timestamp": "2026-10-09T14:08:33.395Z"
+                                }
+                              }
+                            ]
+                          }
+                        ],
                         "tags": [
                           "Main Line"
                         ]
@@ -100,5 +411,5 @@
       "timestamp": "2026-06-17T14:20:30.487Z"
     }
   },
-  "faceFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3"
+  "faceFen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4"
 }

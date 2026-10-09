@@ -48,7 +48,7 @@ export function useTabs() {
   }, [activeTabId]);
 
   const updateRepertoire = useCallback((repId: string, rep: Repertoire) => {
-    setTabs((prev) => prev.map((t) => (t.repId === repId ? { ...t, repertoire: rep } : t)));
+    setTabs((prev) => prev.map((t) => (t.repId === repId ? { ...t, title: rep.name, repertoire: rep } : t)));
   }, []);
 
   const setActive = useCallback((tabId: string) => {

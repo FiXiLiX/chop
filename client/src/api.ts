@@ -1,4 +1,4 @@
-import { Repertoire, RepertoireSummary, Arrow } from './types';
+import { Repertoire, RepertoireSummary, Arrow, MoveNode } from './types';
 
 const BASE = '/api/repertoires';
 
@@ -127,4 +127,17 @@ export async function importPgn(id: string, pgn: string): Promise<Repertoire> {
 export async function exportPgn(id: string): Promise<string> {
   const res = await fetch(`${BASE}/${id}/pgn`);
   return res.text();
+}
+
+export async function saveTree(id: string, tree: MoveNode): Promise<Repertoire> {
+  const res = await fetch(`${BASE}/${id}/tree`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tree }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to save tree');
+  }
+  return res.json();
 }
